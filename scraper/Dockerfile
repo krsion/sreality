@@ -8,7 +8,6 @@ RUN npm ci
 RUN npx playwright install-deps 
 RUN npx playwright install
 
-COPY .env .
 COPY prisma ./prisma
 RUN npx prisma generate
 
