@@ -1,0 +1,38 @@
+
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres
+    container_name: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: johndoe
+      POSTGRES_PASSWORD: randompassword
+      POSTGRES_DB: mydb
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+  scraper:
+    build:
+      context: scraper
+    container_name: scraper
+    environment:
+      - DB_HOST=postgres
+      - DB_USER=johndoe
+      - DB_PASSWORD=randompassword
+      - DB_NAME=mydb
+    depends_on:
+      - postgres
+  web:
+    build:
+      context: web
+    container_name: web
+    ports:
+      - 8080:3000
+    depends_on:
+      - postgres
+
+volumes:
+  db_data:
